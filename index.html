@@ -1,1 +1,28 @@
-hello
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Generate SHA256</title>
+</head>
+<body>
+    <input id="input" placeholder="Input" style="width: 400px; padding: 10px 10px"/><br>
+    <pre>API Key: <span id="output"></span></pre>
+    <script>
+      async function hash(string) {
+        const utf8 = new TextEncoder().encode(string);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray
+          .map((bytes) => bytes.toString(16).padStart(2, '0'))
+          .join('');
+        return hashHex;
+      }
+      document.getElementById("input").addEventListener("keyup", async (event) => {
+        document.getElementById("output").innerText = await hash(event.target.value);
+      })
+    </script>
+</body>
+</html>
